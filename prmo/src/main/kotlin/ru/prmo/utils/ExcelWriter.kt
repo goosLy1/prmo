@@ -40,6 +40,7 @@ class ExcelWriter(
     init {
         headerStyle.setFont(font)
         headerStyle.alignment = HorizontalAlignment.CENTER
+//        headerStyle.dataFormat = workbook.createDataFormat().getFormat("dd.MM.yyyy")
     }
 
     private val depStyle = workbook.createCellStyle()
@@ -119,7 +120,7 @@ class ExcelWriter(
         var date = startDate
         while (date.isBefore(endDate.plusDays(1))) {
             val dateHeaderCell = headerRow.createCell(column)
-            dateHeaderCell.setCellValue(date.toString())
+            dateHeaderCell.setCellValue(date.format(DateTimeFormatter.ofPattern("dd.MM.yyyy")))
             dateHeaderCell.cellStyle = headerStyle
             sheet.autoSizeColumn(column)
             column++

@@ -1,15 +1,18 @@
 package ru.prmo.controller
 
+import jakarta.validation.Valid
 import org.springframework.format.annotation.DateTimeFormat
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.ui.set
+import org.springframework.validation.Errors
 import org.springframework.web.bind.annotation.*
 import ru.prmo.dto.DailyTotalDto
 import ru.prmo.dto.OperationRecordDto
 import ru.prmo.dto.StringOperationRecordDto
 import ru.prmo.dto.UserDataDto
 import ru.prmo.exception.BadDayToSendData
+import ru.prmo.exception.CharactersInIntegerFieldException
 import ru.prmo.service.DailyTotalService
 import ru.prmo.service.DepartmentService
 import ru.prmo.service.UserService
@@ -38,7 +41,7 @@ class UserController(
         if (dailyTotal.operationRecords.isEmpty()) {
             val operations = departmentService.getDepartmentByUser(principal).operations.map { it.operationName }
             for (operation in operations) {
-                if (operation.contains("δΰ/νες")) {
+                if (operation.contains("Π΄Π°/Π½ΠµΡ‚")) {
                     dailyTotal.addStringRecord(StringOperationRecordDto(operationName = operation))
                 } else {
                     dailyTotal.addRecord(OperationRecordDto(operationName = operation))
@@ -58,18 +61,30 @@ class UserController(
 
     @PostMapping("workspace")
     fun createNewDailyTotal(
-        @ModelAttribute("form") dailyTotal: DailyTotalDto,
+        @Valid @ModelAttribute("form") dailyTotal: DailyTotalDto,
+        errors: Errors,
         model: Model,
         principal: Principal
     ): String {
+        val currentDate = dailyTotal.date
 
+//        for (op in dailyTotal.operationRecords) {
+//            if (op.count !is Int) {
+//                throw CharactersInIntegerFieldException()
+//            }
+//        }
+
+
+//        if (errors.hasErrors()) {
+//            return "redirect:/user/workspace?date=$currentDate"
+//        }
         if (dailyTotal.date!!.isBefore(LocalDate.now().minusDays(1))) {
             throw BadDayToSendData()
         } else {
             dailyTotalService.createDailyTotal(dailyTotal, principal)
         }
 
-        val currentDate = dailyTotal.date
+
         return "redirect:/user/workspace?date=$currentDate"
     }
 }
