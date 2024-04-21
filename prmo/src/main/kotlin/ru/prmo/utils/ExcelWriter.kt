@@ -65,7 +65,7 @@ class ExcelWriter(
     fun write(departments: List<DepartmentEntity>, dts: Iterable<AdminDailyTotalDto>, reportDataDto: ReportDataDto): String {
         createHeaderRow(reportDataDto)
         createFirstColumn(departments)
-        fillTableWithData(dts)
+        fillTableWithData(dts, departments)
         createTotalsPart()
         createTotalColumn(departments)
         sheet.autoSizeColumn(0)
@@ -156,19 +156,22 @@ class ExcelWriter(
         }
     }
 
-    private fun fillTableWithData(dts:  Iterable<AdminDailyTotalDto>) {
+    private fun fillTableWithData(dts:  Iterable<AdminDailyTotalDto>, departments: List<DepartmentEntity>) {
+//        for (department in departments) {
         for (dt in dts) {
             val dateColumnIndex = findDateColumn(sheet, dt.date)
             if (dateColumnIndex != -1) {
                 val departmentRowIndex = findDepartmentRow(sheet, dt.departmentName)
-                val zhdTotalRow = sheet.getRow(departmentRowIndex + dt.operationRecords.size + 3)
+                val zhdTotalRow =
+                    sheet.getRow(departmentRowIndex + departments[0].operations.size + 1)
                 val zhdTotalCell = zhdTotalRow.createCell(dateColumnIndex)
                 val columnName = CellReference.convertNumToColString(dateColumnIndex)
                 val start = departmentRowIndex + 1
                 val end = departmentRowIndex + 4
                 zhdTotalCell.cellFormula = "SUM($columnName$start:$columnName$end)"
                 zhdTotalCell.cellStyle = depTotalStyle
-                val depTotalRow = sheet.getRow(departmentRowIndex + dt.operationRecords.size + 4)
+                val depTotalRow =
+                    sheet.getRow(departmentRowIndex + departments[0].operations.size + 2)
                 val depTotalCell = depTotalRow.createCell(dateColumnIndex)
                 depTotalCell.setCellValue(dt.total.toDouble())
                 depTotalCell.cellStyle = depTotalStyle
@@ -188,12 +191,13 @@ class ExcelWriter(
                 }
             }
         }
+//    }
     }
 
     private fun createTotalsPart() {
         val lastCellIndex = sheet.getRow(0).lastCellNum
 
-        val operationsForTotal = listOf<String>(
+        val operationsForTotal = listOf(
             "Отстранения (только РЖД предрейсовые, предсменные)",
             "Выявлены с признаками опьянения (только РЖД послерейсовые, послесменные)",
             "Заболеваний",

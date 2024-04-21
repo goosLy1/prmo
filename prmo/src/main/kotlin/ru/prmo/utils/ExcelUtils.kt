@@ -26,7 +26,7 @@ fun findDepartmentRow(sheet: XSSFSheet, departmentName: String): Int {
     }
     return -1
 }
-// можно или нужно сделать из этих двух функций одну
+// РјРѕР¶РЅРѕ РёР»Рё РЅСѓР¶РЅРѕ СЃРґРµР»Р°С‚СЊ РёР· СЌС‚РёС… РґРІСѓС… С„СѓРЅРєС†РёР№ РѕРґРЅСѓ
 
 
 fun findDepartmentOperationRow(sheet: XSSFSheet, dt: AdminDailyTotalDto, oprec: OperationRecordDto): Int {
