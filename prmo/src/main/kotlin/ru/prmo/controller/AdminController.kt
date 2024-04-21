@@ -120,6 +120,17 @@ class AdminController(
         }
         return "departments"
     }
+    @GetMapping("departments/add")
+    fun getDepartmentCreationForm(model: Model): String {
+        model["newDepartment"] = DepartmentDto()
+        return "add-department"
+    }
+    @PostMapping("departments/add")
+    fun addDepartment(@ModelAttribute("newDepartment") departmentDto: DepartmentDto, model: Model): String {
+        departmentService.addDepartment(departmentDto)
+        return "redirect:/admin/departments"
+    }
+
 
     @GetMapping("operations")
     fun getOperations(model: Model): String {
