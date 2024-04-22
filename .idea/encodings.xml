@@ -6,6 +6,7 @@
     <file url="file://$PROJECT_DIR$/prmo/src/main/kotlin/ru/prmo/exception/CharactersInIntegerFieldException.kt" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/prmo/src/main/kotlin/ru/prmo/utils/ExcelUtils.kt" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/prmo/src/main/kotlin/ru/prmo/utils/ExcelWriter.kt" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/prmo/src/main/resources/static/js/actions.js" charset="UTF-8" />
     <file url="PROJECT" charset="windows-1251" />
   </component>
 </project>

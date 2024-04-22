@@ -29,7 +29,7 @@ function getDailyTotal() {
 }
 
 function successSubmit() {
-    alert("Success!")
+    alert("Эй, олень, я все записал, иди домой...")
 }
 
 //
